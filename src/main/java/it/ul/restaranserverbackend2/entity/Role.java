@@ -1,12 +1,10 @@
 package it.ul.restaranserverbackend2.entity;
 
+import it.ul.restaranserverbackend2.entity.enums.RoleName;
 import lombok.*;
-import org.springframework.data.repository.NoRepositoryBean;
+import org.springframework.security.core.GrantedAuthority;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 @Getter
 @Setter
@@ -14,8 +12,20 @@ import javax.persistence.Id;
 @NoArgsConstructor
 @Builder
 @Entity
-public class Role {
+public class Role implements GrantedAuthority {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
+
+    @Enumerated(EnumType.STRING)
+    private RoleName roleName;
+
+    public Role(RoleName roleName) {
+        this.roleName = roleName;
+    }
+
+    @Override
+    public String getAuthority() {
+        return roleName.name();
+    }
 }
