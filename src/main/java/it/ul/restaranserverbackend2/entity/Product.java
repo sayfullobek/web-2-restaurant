@@ -2,8 +2,6 @@ package it.ul.restaranserverbackend2.entity;
 
 import it.ul.restaranserverbackend2.entity.template.AbsNameEntity;
 import lombok.*;
-import org.graalvm.compiler.graph.Node;
-
 import javax.persistence.*;
 import java.util.UUID;
 
@@ -21,7 +19,6 @@ public class Product extends AbsNameEntity {
     private UUID img;
 
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
-    @Column(name = "product_category_id")
     private Category category;
 
     @Column(nullable = false, name = "product_description", length = 99999)

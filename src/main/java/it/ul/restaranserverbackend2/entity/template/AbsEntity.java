@@ -25,7 +25,7 @@ import java.util.UUID;
 @EntityListeners(AuditingEntityListener.class)
 public abstract class AbsEntity {
     @Id
-    @Type(type = "org.hibernate.type.PostgresUUIDType")
+//    @Type(type = "org.hibernate.type.PostgresUUIDType")
     @GeneratedValue(generator = "uuid2")
     @GenericGenerator(name = "uuid2", strategy = "org.hibernate.id.UUIDGenerator")
     private UUID id;
