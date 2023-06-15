@@ -1,9 +1,7 @@
 package it.ul.restaranserverbackend2.entity;
 
 import it.ul.restaranserverbackend2.entity.template.AbsNameEntity;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.Entity;
 
@@ -11,5 +9,6 @@ import javax.persistence.Entity;
 @Setter
 @NoArgsConstructor
 @Entity
-public class Category extends AbsNameEntity {
+public class Region extends AbsNameEntity {
+
 }
