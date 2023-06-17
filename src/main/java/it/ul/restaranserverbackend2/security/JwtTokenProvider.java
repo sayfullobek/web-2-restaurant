@@ -12,18 +12,18 @@ import java.util.UUID;
 public class JwtTokenProvider {
 
     @Value("${app.jwtSecretKey}")
-    private String key;
+    private String kalituzingizBratan;
 
     @Value("${app.jwtExpireInMilSec}")
-    private Long expireDate;
+    private Long expireTime;
 
     public String generateToken(UUID userId) {
-        Date expire = new Date(new Date().getTime() + expireDate);
+        Date yashashMuddati = new Date(new Date().getTime() + expireTime);
         return Jwts.builder()
                 .setSubject(userId.toString())
                 .setIssuedAt(new Date())
-                .setExpiration(expire)
-                .signWith(SignatureAlgorithm.ES512, key)
+                .setExpiration(yashashMuddati)
+                .signWith(SignatureAlgorithm.HS512, kalituzingizBratan)
                 .compact();
     }
 }

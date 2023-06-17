@@ -16,10 +16,10 @@ public class JwtErrors implements AuthenticationEntryPoint {
     private static final Logger logger = LoggerFactory.getLogger(JwtErrors.class);
 
     @Override
-    public void commence(HttpServletRequest request,
-                         HttpServletResponse response,
-                         AuthenticationException authException) throws IOException, ServletException {
-        logger.error("Bu yo'lga kirish mumkin emas. Sababi " + authException.getMessage());
-        response.sendError(HttpServletResponse.SC_UNAUTHORIZED, authException.getMessage());
+    public void commence(HttpServletRequest httpServletRequest,
+                         HttpServletResponse httpServletResponse,
+                         AuthenticationException e) throws IOException, ServletException {
+        logger.error("Bu yo'lga kirish mumkin emas. Sababi " + e.getMessage());
+        httpServletResponse.sendError(HttpServletResponse.SC_UNAUTHORIZED, e.getMessage());
     }
 }

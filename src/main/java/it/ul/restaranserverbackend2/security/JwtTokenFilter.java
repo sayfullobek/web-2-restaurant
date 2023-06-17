@@ -22,43 +22,47 @@ import java.util.UUID;
 
 public class JwtTokenFilter extends OncePerRequestFilter {
     private static final Logger logger = LoggerFactory.getLogger(JwtTokenFilter.class);
+
     @Autowired
     AuthService authService;
+
     @Value("${app.jwtSecretKey}")
-    private String key;
+    private String kalituzingizBratan;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request,
                                     HttpServletResponse response,
-                                    FilterChain filterChain)
-            throws ServletException, IOException {
+                                    FilterChain filterChain) throws ServletException, IOException {
         try {
-            String token = request.getHeader("Authorization");
-            if (token != null) {
-                String tokenType = token.substring(0, 6);
-                if (tokenType.equals("Bearer")) {
-                    token = token.substring(7);
-                    if (tokenValidmi(token)) {
-                        String userId = getUserIdTokenningIchidan(token);
+            String tokenxon = request.getHeader("Authorization");
+            if (tokenxon != null) {
+                if (tokenxon.substring(0, 6).equals("Bearer")) {
+                    tokenxon = tokenxon.substring(7);
+                    if (tokenValidmi(tokenxon)) {
+                        String userId = getUserIdTokenningIchidan(tokenxon);
                         UserDetails userDetails = authService.getUserById(UUID.fromString(userId));
-                        UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(
-                                userDetails, null, userDetails.getAuthorities()
-                        );
-                        usernamePasswordAuthenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-                        SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
+                        UsernamePasswordAuthenticationToken authenticationToken =
+                                new UsernamePasswordAuthenticationToken(
+                                        userDetails,
+                                        null,
+                                        userDetails.getAuthorities()
+                                );
+                        authenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+                        SecurityContextHolder.getContext().setAuthentication(authenticationToken);
                     }
                 }
             }
         } catch (Exception e) {
-            logger.error("kirish mumkin emas", e);
+            logger.error("Could not set user authentication in security context", e);
         }
         filterChain.doFilter(request, response);
     }
 
+
     public boolean tokenValidmi(String tokenjon) {
         try {
             Jwts.parser()
-                    .setSigningKey(key)
+                    .setSigningKey(kalituzingizBratan)
                     .parseClaimsJws(tokenjon);
             return true;
         } catch (SignatureException ex) {
@@ -75,11 +79,13 @@ public class JwtTokenFilter extends OncePerRequestFilter {
         return false;
     }
 
+
     public String getUserIdTokenningIchidan(String token) {
         return Jwts.parser()
-                .setSigningKey(key)
+                .setSigningKey(kalituzingizBratan)
                 .parseClaimsJws(token)
                 .getBody()
                 .getSubject();
     }
+
 }

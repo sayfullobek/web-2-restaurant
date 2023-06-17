@@ -7,41 +7,48 @@ import it.ul.restaranserverbackend2.payload.LoginDto;
 import it.ul.restaranserverbackend2.payload.ResToken;
 import it.ul.restaranserverbackend2.repository.AuthRepository;
 import it.ul.restaranserverbackend2.security.JwtTokenProvider;
+import it.ul.restaranserverbackend2.service.AuthService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/auth")
 @RequiredArgsConstructor
 public class AuthController {
-    private final AuthenticationManager authenticationManager;
-    private final AuthRepository authRepository;
-    private final JwtTokenProvider jwtTokenProvider;
+    private final
+    AuthService authService;
+    private final
+    AuthenticationManager authenticationManager;
+    private final
+    AuthRepository authRepository;
+    private final
+    JwtTokenProvider jwtTokenProvider;
 
     @PostMapping("/login")
-    public HttpEntity<?> register(@RequestBody LoginDto loginDto) {
+    public HttpEntity<?> login(@RequestBody LoginDto request) {
         authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(loginDto.getPhoneNumber(), loginDto.getPassword())
+                new UsernamePasswordAuthenticationToken(request.getPhoneNumber(), request.getPassword())
         );
-        User user = authRepository.findByPhoneNumber(loginDto.getPhoneNumber());
-        if (user != null) {
-            GetData data = getData(user);
-            return ResponseEntity.ok(data);
-        }
-        return ResponseEntity.ok(ApiResponse.builder().message("sizga kirish mumkin emas").success(false).build());
+        User user = authRepository.findUserByPhoneNumber(request.getPhoneNumber()).orElseThrow(() -> new ResourceNotFoundException("getUser"));
+        ResToken resToken = new ResToken(generateToken(request.getPhoneNumber()));
+        System.out.println(ResponseEntity.ok(getMal(user, resToken)));
+        return ResponseEntity.ok(getMal(user, resToken));
     }
 
-    public GetData getData(User user) {
-        String token = jwtTokenProvider.generateToken(user.getId());
-        ResToken resToken = ResToken.builder().body(token).build();
-        return GetData.builder().resToken(resToken).user(user).build();
+    private String generateToken(String phoneNumber) {
+        User user = authRepository.findUserByPhoneNumber(phoneNumber).orElseThrow(() -> new UsernameNotFoundException("getUser"));
+        return jwtTokenProvider.generateToken(user.getId());
     }
 
+    public GetData getMal(User user, ResToken resToken) {
+        return new GetData(user, resToken);
+    }
 }
