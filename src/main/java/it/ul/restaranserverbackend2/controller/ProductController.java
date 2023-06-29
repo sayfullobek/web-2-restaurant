@@ -24,12 +24,8 @@ public class ProductController implements IntProductController {
     @GetMapping
     @Override
     public HttpEntity<?> getProduct() {
-        try {
-            List<Product> all = productRepository.findAll();
-            return ResponseEntity.ok(all);
-        } catch (Exception e) {
-            return null;
-        }
+        List<Product> all = productRepository.findAll();
+        return ResponseEntity.ok(all);
     }
 
     @GetMapping("/{id}")

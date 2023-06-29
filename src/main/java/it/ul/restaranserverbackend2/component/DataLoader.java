@@ -37,7 +37,7 @@ public class DataLoader implements CommandLineRunner {
 
             authRepository.save(
                     new User(
-                            "qozi", "gadayev", "123456789", passwordEncoder.encode("1234567"), Collections.singleton(roleRepository.findById(3).orElseThrow(() -> new ResourceNotFoundException("getRole")))
+                            "qozi", "gadayev", "123456789", passwordEncoder.encode("123456789"), Collections.singleton(roleRepository.findById(3).orElseThrow(() -> new ResourceNotFoundException("getRole")))
                     )
             );
         }
