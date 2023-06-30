@@ -23,5 +23,6 @@ public class InitConfig {
             e.printStackTrace();
         }
         return false;
+
     }
 }
