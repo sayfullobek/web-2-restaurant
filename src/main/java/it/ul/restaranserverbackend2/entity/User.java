@@ -23,6 +23,8 @@ public class User extends AbsEntity implements UserDetails {
 
     @Column(nullable = false)
     private String lastName;
+    @OneToOne
+    private SaveProduct saveProduct;
 
     @Column(nullable = false, unique = true)
     private String phoneNumber;
@@ -35,7 +37,6 @@ public class User extends AbsEntity implements UserDetails {
             joinColumns = {@JoinColumn(name = "users_id")},
             inverseJoinColumns = {@JoinColumn(name = "role_id")})
     private Set<Role> roles;
-
     private boolean enabled = true;
     private boolean credentialsNonExpired = true;
     private boolean accountNonLocked = true;
