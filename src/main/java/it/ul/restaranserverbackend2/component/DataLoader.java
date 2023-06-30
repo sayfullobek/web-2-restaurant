@@ -23,7 +23,6 @@ import java.util.Collections;
 public class DataLoader implements CommandLineRunner {
     @Value("${spring.jpa.hibernate.ddl-auto}")
     private String init;
-
     private final AuthRepository authRepository;
     private final RoleRepository roleRepository;
     private final PasswordEncoder passwordEncoder;

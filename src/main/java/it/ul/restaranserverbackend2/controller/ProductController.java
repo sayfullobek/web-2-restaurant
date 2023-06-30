@@ -63,4 +63,10 @@ public class ProductController implements IntProductController {
         ApiResponse apiResponse = productService.deleteProduct(id);
         return ResponseEntity.status(apiResponse.isSuccess() ? 200 : 409).body(apiResponse);
     }
+
+    @GetMapping("/category/{id}")
+    public HttpEntity<?> getProductByCategory(@PathVariable Integer id) {
+        List<Product> byCategoryId = productRepository.findByCategoryId(id);
+        return ResponseEntity.ok(byCategoryId);
+    }
 }
