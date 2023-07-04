@@ -24,20 +24,18 @@ public class SaveProductService {
         try {
             User user = authRepository.findById(userId).orElseThrow(() -> new ResourceNotFoundException("getUser"));
             Product getProduct = productRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("getProduct"));
-            SaveProduct saveProduct = user.getSaveProduct();
-            if (saveProduct != null) {
-                saveProduct.getProducts().add(getProduct);
+
+            if (user.getSaveProduct() == null) {
+                SaveProduct saveProduct = new SaveProduct();
                 saveProductRepository.save(saveProduct);
+                saveProduct.getProducts().add(getProduct);
+                user.setSaveProduct(saveProduct);
                 authRepository.save(user);
                 return new ApiResponse("Mahsulot savatga saqlandi", true);
             }
-            SaveProduct saveProduct1 = new SaveProduct();
-            SaveProduct save = saveProductRepository.save(saveProduct1);
-            user.setSaveProduct(save);
-            saveProduct1.getProducts().add(getProduct);
+            user.getSaveProduct().getProducts().add(getProduct);
             authRepository.save(user);
             return new ApiResponse("Mahsulot savatga saqlandi", true);
-
         } catch (Exception e) {
             return new ApiResponse("Mahsulot savatga saqlashda hatolik", false);
         }
