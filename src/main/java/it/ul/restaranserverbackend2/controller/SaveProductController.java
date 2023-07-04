@@ -1,10 +1,8 @@
 package it.ul.restaranserverbackend2.controller;
 
-import it.ul.restaranserverbackend2.entity.SaveProduct;
 import it.ul.restaranserverbackend2.entity.User;
 import it.ul.restaranserverbackend2.payload.ApiResponse;
 import it.ul.restaranserverbackend2.repository.AuthRepository;
-import it.ul.restaranserverbackend2.repository.SaveProductRepository;
 import it.ul.restaranserverbackend2.service.SaveProductService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.rest.webmvc.ResourceNotFoundException;
@@ -18,7 +16,6 @@ import java.util.UUID;
 @RequestMapping("/api/basket")
 @RequiredArgsConstructor
 public class SaveProductController {
-    private final SaveProductRepository saveProductRepository;
     private final SaveProductService service;
     private final AuthRepository authRepository;
 

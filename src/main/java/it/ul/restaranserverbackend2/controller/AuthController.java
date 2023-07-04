@@ -1,10 +1,7 @@
 package it.ul.restaranserverbackend2.controller;
 
 import it.ul.restaranserverbackend2.entity.User;
-import it.ul.restaranserverbackend2.payload.ApiResponse;
-import it.ul.restaranserverbackend2.payload.GetData;
-import it.ul.restaranserverbackend2.payload.LoginDto;
-import it.ul.restaranserverbackend2.payload.ResToken;
+import it.ul.restaranserverbackend2.payload.*;
 import it.ul.restaranserverbackend2.repository.AuthRepository;
 import it.ul.restaranserverbackend2.security.JwtTokenProvider;
 import it.ul.restaranserverbackend2.service.AuthService;
@@ -17,6 +14,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.UUID;
 
 @RestController
@@ -32,6 +30,16 @@ public class AuthController {
     private final
     JwtTokenProvider jwtTokenProvider;
 
+    @PostMapping("/findUser")
+    public HttpEntity<?> findUser(@RequestBody LoginDto loginDto) {
+        boolean b = authRepository.existsUsersByPhoneNumber(loginDto.getPhoneNumber());
+        if (b) {
+            return ResponseEntity.ok(new ApiResponse("login", true));
+        } else {
+            return ResponseEntity.ok(new ApiResponse("register", true));
+        }
+    }
+
     @PostMapping("/login")
     public HttpEntity<?> login(@RequestBody LoginDto request) {
         authenticationManager.authenticate(
@@ -41,6 +49,18 @@ public class AuthController {
         ResToken resToken = new ResToken(generateToken(request.getPhoneNumber()));
         System.out.println(ResponseEntity.ok(getMal(user, resToken)));
         return ResponseEntity.ok(getMal(user, resToken));
+    }
+
+    @GetMapping
+    public HttpEntity<?> getUser() {
+        List<User> all = authRepository.findAll();
+        return ResponseEntity.ok(all);
+    }
+
+    @PostMapping("/register")
+    public HttpEntity<?> register(@RequestBody AuthDto dto) {
+        ApiResponse register = authService.register(dto);
+        return ResponseEntity.status(register.isSuccess() ? 200 : 409).body(register);
     }
 
     private String generateToken(String phoneNumber) {

@@ -11,7 +11,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.stereotype.Service;
 
-import java.util.Collections;
 import java.util.UUID;
 
 @Service
@@ -21,15 +20,24 @@ public class SaveProductService {
     private final AuthRepository authRepository;
     private final ProductRepository productRepository;
 
-    public ApiResponse  saveProduct(UUID userId, Integer id) {
+    public ApiResponse saveProduct(UUID userId, Integer id) {
         try {
             User user = authRepository.findById(userId).orElseThrow(() -> new ResourceNotFoundException("getUser"));
             Product getProduct = productRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("getProduct"));
-            SaveProduct saveProduct = new SaveProduct();
-            user.setSaveProduct(saveProduct);
-            saveProduct.setProducts(Collections.singletonList(getProduct));
-            saveProductRepository.save(saveProduct);
+            SaveProduct saveProduct = user.getSaveProduct();
+            if (saveProduct != null) {
+                saveProduct.getProducts().add(getProduct);
+                saveProductRepository.save(saveProduct);
+                authRepository.save(user);
+                return new ApiResponse("Mahsulot savatga saqlandi", true);
+            }
+            SaveProduct saveProduct1 = new SaveProduct();
+            SaveProduct save = saveProductRepository.save(saveProduct1);
+            user.setSaveProduct(save);
+            saveProduct1.getProducts().add(getProduct);
+            authRepository.save(user);
             return new ApiResponse("Mahsulot savatga saqlandi", true);
+
         } catch (Exception e) {
             return new ApiResponse("Mahsulot savatga saqlashda hatolik", false);
         }
