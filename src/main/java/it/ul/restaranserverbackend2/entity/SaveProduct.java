@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 @Getter
@@ -18,7 +19,7 @@ public class SaveProduct {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer Id;
     @OneToMany
-    private List<Product> products;
+    private List<Product> products = new ArrayList<>();
 
     public SaveProduct(List<Product> products) {
         this.products = products;
