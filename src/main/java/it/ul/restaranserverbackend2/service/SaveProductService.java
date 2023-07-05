@@ -11,6 +11,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -24,7 +26,6 @@ public class SaveProductService {
         try {
             User user = authRepository.findById(userId).orElseThrow(() -> new ResourceNotFoundException("getUser"));
             Product getProduct = productRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("getProduct"));
-
             if (user.getSaveProduct() == null) {
                 SaveProduct saveProduct = new SaveProduct();
                 saveProductRepository.save(saveProduct);
@@ -33,7 +34,11 @@ public class SaveProductService {
                 authRepository.save(user);
                 return new ApiResponse("Mahsulot savatga saqlandi", true);
             }
-            user.getSaveProduct().getProducts().add(getProduct);
+            SaveProduct saveProduct = user.getSaveProduct();
+            List<Product> products = new ArrayList<>(saveProduct.getProducts());
+            products.add(getProduct);
+            saveProduct.setProducts(products);
+            saveProductRepository.save(saveProduct);
             authRepository.save(user);
             return new ApiResponse("Mahsulot savatga saqlandi", true);
         } catch (Exception e) {

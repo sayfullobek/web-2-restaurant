@@ -20,8 +20,4 @@ public class SaveProduct {
     private Integer Id;
     @OneToMany
     private List<Product> products = new ArrayList<>();
-
-    public SaveProduct(List<Product> products) {
-        this.products = products;
-    }
 }
