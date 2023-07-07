@@ -8,6 +8,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 public class RestaranServerBackend2Application {
     public static void main(String[] args) {
         if (InitConfig.isStart()) {
+            System.out.println("hello Shavkat");
             SpringApplication.run(RestaranServerBackend2Application.class, args);
         }
     }
