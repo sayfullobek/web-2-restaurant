@@ -13,9 +13,7 @@ import java.util.UUID;
 @RequiredArgsConstructor
 @RequestMapping("/api/attachment")
 public class AttachmentController {
-
     private final AttachmentService attachmentService;
-
     @PostMapping("/upload")
     @ResponseBody
     public UUID uploadFile(MultipartHttpServletRequest request) {

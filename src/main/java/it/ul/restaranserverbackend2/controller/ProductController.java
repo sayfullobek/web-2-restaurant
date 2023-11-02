@@ -14,10 +14,10 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@RestController
-@RequestMapping("/api/product")
-@RequiredArgsConstructor
-public class ProductController implements IntProductController {
+    @RestController
+    @RequestMapping("/api/product")
+    @RequiredArgsConstructor
+public class ProductController implements IntProductController   {
     private final ProductService productService;
     private final ProductRepository productRepository;
 
@@ -53,7 +53,7 @@ public class ProductController implements IntProductController {
         return ResponseEntity.status(apiResponse.isSuccess() ? 200 : 409).body(apiResponse);
     }
 
-    @DeleteMapping("/{id}")
+        @DeleteMapping("/{id}")
     @Override
     public HttpEntity<?> deleteProduct(@PathVariable Integer id) {
         ApiResponse apiResponse = productService.deleteProduct(id);

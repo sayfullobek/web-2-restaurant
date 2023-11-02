@@ -24,4 +24,6 @@ public class Product extends AbsNameEntity {
 
     @Column(nullable = false, name = "product_description", length = 99999)
     private String description;
+//    @ManyToOne(optional = false)
+//    private Order order;
 }

@@ -10,8 +10,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.stereotype.Service;
 
-@Service
-@RequiredArgsConstructor
+    @Service
+    @RequiredArgsConstructor
 public class ProductService implements IntProductService {
     private final ProductRepository productRepository;
     private final CategoryRepository categoryRepository;
@@ -22,7 +22,7 @@ public class ProductService implements IntProductService {
             Product product = Product.builder()
                     .price(productDto.getPrice())
                     .img(productDto.getImg())
-                    .description(productDto.getDescription())
+                     .description(productDto.getDescription())
                     .category(categoryRepository.findById(productDto.getCategoryId()).orElseThrow(() -> new ResourceNotFoundException("getCategory")))
                     .build();
             product.setName(productDto.getName());
