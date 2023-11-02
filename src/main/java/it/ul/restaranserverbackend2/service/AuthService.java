@@ -46,7 +46,6 @@ public class AuthService implements UserDetailsService {
             return new ApiResponse("xatolik", false);
         }
     }
-
     @Override
     public UserDetails loadUserByUsername(String phoneNumber) throws UsernameNotFoundException {
         return authRepository.findUserByPhoneNumber(phoneNumber).orElseThrow(() -> new UsernameNotFoundException("getUser"));
